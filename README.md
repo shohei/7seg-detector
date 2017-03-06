@@ -17,3 +17,9 @@ $  fswebcam --no-timestamp --no-banner -r 1280x1024 image.jpg
 
 # 2値化
 ![](bwimage.jpg)
+
+# SSOCR
+```
+$ ./detector.sh
+-100
+```
