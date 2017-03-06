@@ -12,3 +12,5 @@ Golangでやりたいけど、Python+OpenCVでも可
 $  fswebcam --no-timestamp --no-banner -r 1280x1024 image.jpg
 ``` 
 
+# トリミング後
+![](dst.jpg)
