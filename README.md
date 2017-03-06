@@ -4,3 +4,5 @@
 目標座標トリミング→学習器と比較→数値出力
 Golangでやりたいけど、Python+OpenCVでも可
 
+
+![](target.jpg)
