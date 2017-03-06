@@ -6,3 +6,9 @@ Golangでやりたいけど、Python+OpenCVでも可
 
 
 ![](target.jpg)
+
+# fswebcam
+``` 
+$  fswebcam --no-timestamp --no-banner -r 1280x1024 image.jpg
+``` 
+
