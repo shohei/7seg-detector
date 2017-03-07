@@ -36,7 +36,7 @@ def parseCalibrateConfig():
         rod3 = line.split(",")[2].rstrip()
         X = line.split(",")[3].rstrip()
         Y = line.split(",")[4].rstrip()
-        comm = "G111 X"+X+" Y"+Y
+        comm = "G1 X"+X+" Y"+Y+" F1000"
         print comm
         for c in comm:
             s.write(c)
@@ -53,11 +53,11 @@ def parseCalibrateConfig():
 #         fout.write(str(rod1)+","+str(rod2)+","+str(rod3)+","+str(X)+","+str(Y)+","+str(Z)) 
 
 def detectNumber():
-    # command = "fswebcam --no-timestamp --no-banner -r 1280x1024 image.jpg;\
-    #         python trimmer.py; python binarize.py; \
-    #         ./ssocr -d -1 bwimage.jpg z_height"
-    command = "python trimmer.py; python binarize.py; \
-             ./ssocr -d -1 bwimage.jpg > z_height.txt"
+    command = "fswebcam --no-timestamp --no-banner -r 1280x1024 image.jpg;\
+            python trimmer.py; python binarize.py; \
+            ./ssocr -d -1 bwimage.jpg > z_height.txt"
+    #command = "python trimmer.py; python binarize.py; \
+    #         ./ssocr -d -1 bwimage.jpg > z_height.txt"
     os.system(command)
     _, z_height = commands.getstatusoutput("cat z_height.txt")
     z_height = float(z_height)
