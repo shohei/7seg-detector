@@ -9,7 +9,7 @@ import commands
 import os
 
 try:
-    status, output = commands.getstatusoutput("ls /dev/tty.usb*")
+    status, output = commands.getstatusoutput("ls /dev/ttyACM0")
     dev_port = output
     s = serial.Serial(port=dev_port,baudrate=115200)
 except Exception:
