@@ -36,6 +36,10 @@ def parseCalibrateConfig():
         rod3 = line.split(",")[2]
         X = line.split(",")[3]
         Y = line.split(",")[4]
+        comm = "G111 X"+X+" Y"+Y
+        print comm
+        for c in comm:
+            s.write(c)
 
 def parseWaitCommand(comm):
     if comm.find('WAIT,') > -1:
@@ -75,6 +79,7 @@ while(True):
     try:
         key = raw_input()
         if (key=='a'):
+            print "hey, calibration"
             parseCalibrateConfig()
         if(key==""):
             t2._Thread__stop()
