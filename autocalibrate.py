@@ -25,7 +25,7 @@ fout = open("result.txt",'w')
 rod1 = 0
 rod2 = 0
 rod3 = 0
-X = 175
+X = 0 
 Y = 0
 
 def parseG111Command(comm):
