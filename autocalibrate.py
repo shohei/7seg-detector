@@ -28,9 +28,14 @@ rod3 = 0
 X = 0 
 Y = 0
 
-def parseG111Command(comm):
-    return
-
+def parseCalibrateConfig():
+    fin = open("config.txt",'r').readlines()
+    for line in fin:
+        rod1 = line.split(",")[0]
+        rod2 = line.split(",")[1]
+        rod3 = line.split(",")[2]
+        X = line.split(",")[3]
+        Y = line.split(",")[4]
 
 def parseWaitCommand(comm):
     if comm.find('WAIT,') > -1:
@@ -69,8 +74,8 @@ print "Wait a moment for initializing......"
 while(True):
     try:
         key = raw_input()
-        if key.find('G111') > -1:
-            parseG111Command(key)
+        if (key=='a'):
+            parseCalibrateConfig()
         if(key==""):
             t2._Thread__stop()
             exit()
