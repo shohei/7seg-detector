@@ -5,7 +5,7 @@
 - Golangでやりたいけど、Python+OpenCVでも可
 
 
-![](target.jpg)
+![](image.jpg)
 
 # fswebcam
 ``` 
