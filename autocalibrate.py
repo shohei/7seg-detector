@@ -107,6 +107,7 @@ while(True):
     except KeyboardInterrupt:
 	s.close()
         t2._Thread__stop()
+	fout.close()
         exit()
 
-fout.close()
+#fout.close()
