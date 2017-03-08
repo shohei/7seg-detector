@@ -28,6 +28,14 @@ rod3 = 0
 X = 0 
 Y = 0
 
+#class Pref():
+#    def __init__(self):
+#        self.rod1 = 0
+#        self.rod2 = 0
+#        self.rod3 = 0
+#        self.X = 0 
+#        self.Y = 0
+
 def parseCalibrateConfig():
     fin = open("config.txt",'r').readlines()
     for line in fin:
@@ -40,6 +48,7 @@ def parseCalibrateConfig():
         print comm
         for c in comm:
             s.write(c)
+	s.write("\r")
         time.sleep(10)
         Z = detectNumber()
         print str(rod1)+","+str(rod2)+","+str(rod3)+","+str(X)+","+str(Y)+","+str(Z) 
@@ -92,6 +101,11 @@ while(True):
         s.write(key)
     except Exception:
         #print "\nstop thread2"
+	s.close()
+        t2._Thread__stop()
+        exit()
+    except KeyboardInterrupt:
+	s.close()
         t2._Thread__stop()
         exit()
 
