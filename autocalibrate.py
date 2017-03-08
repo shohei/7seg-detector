@@ -49,7 +49,7 @@ def parseCalibrateConfig():
         for c in comm:
             s.write(c)
 	s.write("\r")
-        time.sleep(10)
+        time.sleep(15)
         Z = detectNumber()
         print str(rod1)+","+str(rod2)+","+str(rod3)+","+str(X)+","+str(Y)+","+str(Z) 
         fout.write(str(rod1)+","+str(rod2)+","+str(rod3)+","+str(X)+","+str(Y)+","+str(Z)) 
