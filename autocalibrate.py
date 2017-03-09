@@ -7,6 +7,8 @@ import sys
 import time
 import commands
 import os
+import traceback
+
 
 try:
     status, output = commands.getstatusoutput("ls /dev/ttyACM0")
@@ -41,6 +43,13 @@ class Pref():
 #        self.X = 0 
 #        self.Y = 0
 
+def goToPlaneCenter():
+    comm = "G1 X0 Y0"
+    print comm
+    for c in comm:
+        s.write(c)
+    s.write("\r")
+
 def setOrigin():
     comm = "G28"
     print comm
@@ -71,6 +80,7 @@ def startCalibration():
 
 def parseCalibrateConfig():
     fin = open("config.txt",'r').readlines()
+    lineNumber = 1
     for line in fin:
         rod1 = line.split(",")[0].rstrip()
         rod2 = line.split(",")[1].rstrip()
@@ -84,10 +94,12 @@ def parseCalibrateConfig():
         lockUntilOk()
 
         Zheight = detectNumber()
-        print "*************************************************"
-        print "{0},{1},{2},{3},{4}\n".format(rod1,rod2,rod3,X,Y,Zheight)
-        print "*************************************************"
-        four.write("{0},{1},{2},{3},{4}\n".format(rod1,rod2,rod3,X,Y,Zheight))
+        print "{0},{1},{2},{3},{4},{5}\n".format(rod1,rod2,rod3,X,Y,Zheight)
+        fout.write("{0},{1},{2},{3},{4},{5}\n".format(rod1,rod2,rod3,X,Y,Zheight))
+        print "processed config line ",lineNumber
+        lineNumber += 1
+
+    goToPlaneCenter()
 
 # def parseWaitCommand(comm):
 #     if comm.find('WAIT,') > -1:
@@ -109,10 +121,7 @@ def sendLineMove(_X,_Y):
     s.write("\r")
 
 def lockUntilOk():
-    ctr = 0
     while pref.machineBusy==True:
-	print "waiting",ctr,"sec."
-        ctr = ctr + 1
         time.sleep(1)
 
 def detectNumber():
@@ -157,14 +166,15 @@ while(True):
             exit()
         key += "\n"
         s.write(key)
-    except Exception:
-	s.close()
-        t2._Thread__stop()
-        exit()
     except KeyboardInterrupt:
 	s.close()
         t2._Thread__stop()
 	fout.close()
+        exit()
+    except:
+        print traceback.format_exc()
+	s.close()
+        t2._Thread__stop()
         exit()
 
 #fout.close()
