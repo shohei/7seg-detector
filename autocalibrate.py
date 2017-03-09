@@ -66,8 +66,8 @@ def startCalibration():
     pref.machineBusy=True
     lockUntilOk()
 
-    print "parseCalibrationConfig()"
-    parseCalibrationConfig()
+    print "parseCalibrateConfig()"
+    parseCalibrateConfig()
 
 def parseCalibrateConfig():
     fin = open("config.txt",'r').readlines()
@@ -83,9 +83,11 @@ def parseCalibrateConfig():
 	pref.machineBusy=True
         lockUntilOk()
 
-        Z = detectNumber()
-        print str(rod1)+","+str(rod2)+","+str(rod3)+","+str(X)+","+str(Y)+","+str(Z) 
-        fout.write(str(rod1)+","+str(rod2)+","+str(rod3)+","+str(X)+","+str(Y)+","+str(Z)) 
+        Zheight = detectNumber()
+        print "*************************************************"
+        print "{0},{1},{2},{3},{4}\n".format(rod1,rod2,rod3,X,Y,Zheight)
+        print "*************************************************"
+        four.write("{0},{1},{2},{3},{4}\n".format(rod1,rod2,rod3,X,Y,Zheight))
 
 # def parseWaitCommand(comm):
 #     if comm.find('WAIT,') > -1:
@@ -98,8 +100,6 @@ def checkMachineState(comm):
      if comm.find('ok') > -1:
 	print "ACK RECEIVED"
 	pref.machineBusy=False
-     else:
-	print "waiting....."
 
 def sendLineMove(_X,_Y):
     comm = "G1 X"+_X+" Y"+_Y+" F1000"
@@ -109,11 +109,9 @@ def sendLineMove(_X,_Y):
     s.write("\r")
 
 def lockUntilOk():
-    print "pref.machineBusy inside lockUntilOk()"
-    print pref.machineBusy
     ctr = 0
     while pref.machineBusy==True:
-	print ctr 
+	print "waiting",ctr,"sec."
         ctr = ctr + 1
         time.sleep(1)
 
