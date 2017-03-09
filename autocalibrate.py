@@ -93,11 +93,15 @@ def parseCalibrateConfig():
 	pref.machineBusy=True
         lockUntilOk()
 
-        Zheight = detectNumber()
-        print "{0},{1},{2},{3},{4},{5}\n".format(rod1,rod2,rod3,X,Y,Zheight)
-        fout.write("{0},{1},{2},{3},{4},{5}\n".format(rod1,rod2,rod3,X,Y,Zheight))
-        print "processed config line ",lineNumber
-        lineNumber += 1
+        z_height = detectNumber()
+        try:
+            z_height = float(z_height)
+            print "{0},{1},{2},{3},{4},{5}\n".format(rod1,rod2,rod3,X,Y,z_height)
+            fout.write("{0},{1},{2},{3},{4},{5}\n".format(rod1,rod2,rod3,X,Y,z_height))
+            print "processed config line ",lineNumber
+            lineNumber += 1
+        except:
+          continue
 
     goToPlaneCenter()
 
@@ -132,7 +136,6 @@ def detectNumber():
     #         ./ssocr -d -1 bwimage.jpg > z_height.txt"
     os.system(command)
     _, z_height = commands.getstatusoutput("cat z_height.txt")
-    z_height = float(z_height)
     return z_height
 
 def thread2():
