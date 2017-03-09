@@ -43,6 +43,13 @@ class Pref():
 #        self.X = 0 
 #        self.Y = 0
 
+def setRodTrim(a,b,c):
+    comm = "M665 A"+a+" B"+b+" C"+c
+    print comm
+    for c in comm:
+        s.write(c)
+    s.write("\r")
+
 def goToPlaneCenter():
     comm = "G1 X0 Y0"
     print comm
@@ -87,7 +94,12 @@ def parseCalibrateConfig():
         rod3 = line.split(",")[2].rstrip()
         X = line.split(",")[3].rstrip()
         Y = line.split(",")[4].rstrip()
-        
+
+        print "setRodTrim()"
+        setRodTrim(rod1,rod2,rod3)
+        pref.machineBusy=True
+        lockUntilOk()
+
         sendLineMove(X,Y)
 
 	pref.machineBusy=True
