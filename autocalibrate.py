@@ -28,6 +28,8 @@ rod3 = 0
 X = 0 
 Y = 0
 
+machineBusy = False
+
 #class Pref():
 #    def __init__(self):
 #        self.rod1 = 0
@@ -35,6 +37,30 @@ Y = 0
 #        self.rod3 = 0
 #        self.X = 0 
 #        self.Y = 0
+def setOrigin():
+    comm = "G28"
+    print comm
+    for c in comm:
+        s.write(c)
+    s.write("\r")
+
+def goToInitialPosition():
+    comm = "G1 Z300"
+    print comm
+    for c in comm:
+        s.write(c)
+    s.write("\r")
+
+def startCalibration():
+    setOrigin()
+    machineBusy=True
+    lockUntilOk()
+
+    goToInitialPosition()
+    machineBusy=True
+    lockUntilOk()
+
+    parseCalibrationConfig()
 
 def parseCalibrateConfig():
     fin = open("config.txt",'r').readlines()
@@ -44,12 +70,12 @@ def parseCalibrateConfig():
         rod3 = line.split(",")[2].rstrip()
         X = line.split(",")[3].rstrip()
         Y = line.split(",")[4].rstrip()
-        comm = "G1 X"+X+" Y"+Y+" F1000"
-        print comm
-        for c in comm:
-            s.write(c)
-	s.write("\r")
-        time.sleep(15)
+        
+        sendLineMove(X,Y)
+
+	machineBusy=True
+        lockUntilOk()
+
         Z = detectNumber()
         print str(rod1)+","+str(rod2)+","+str(rod3)+","+str(X)+","+str(Y)+","+str(Z) 
         fout.write(str(rod1)+","+str(rod2)+","+str(rod3)+","+str(X)+","+str(Y)+","+str(Z)) 
@@ -60,6 +86,21 @@ def parseCalibrateConfig():
 #         time.sleep(waittime)
 #         Z = detectNumber()
 #         fout.write(str(rod1)+","+str(rod2)+","+str(rod3)+","+str(X)+","+str(Y)+","+str(Z)) 
+
+def checkMachineState(comm):
+     if comm.find('ok') > -1:
+	machineBusy=False
+
+def sendLineMove(_X,_Y):
+    comm = "G1 X"+_X+" Y"+_Y+" F1000"
+    print comm
+    for c in comm:
+        s.write(c)
+    s.write("\r")
+
+def lockUntilOk():
+    while machineBusy==True:
+        time.sleep(1)
 
 def detectNumber():
     command = "fswebcam --no-timestamp --no-banner -r 1280x1024 image.jpg;\
@@ -79,6 +120,7 @@ def thread2():
         if data=="\n":
             print line
             #parseWaitCommand(line)
+            checkMachineState(line)
             line = ""
             continue
         line += data
@@ -92,8 +134,8 @@ while(True):
     try:
         key = raw_input()
         if (key=='a'):
-            print "hey, calibration"
-            parseCalibrateConfig()
+            print "calibration start"
+            startCalibration()
         if(key==""):
             t2._Thread__stop()
             exit()
