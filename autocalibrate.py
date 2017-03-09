@@ -28,7 +28,10 @@ rod3 = 0
 X = 0 
 Y = 0
 
-machineBusy = False
+
+class Pref():
+    def __init__(self):
+	self.machineBusy = False
 
 #class Pref():
 #    def __init__(self):
@@ -37,6 +40,7 @@ machineBusy = False
 #        self.rod3 = 0
 #        self.X = 0 
 #        self.Y = 0
+
 def setOrigin():
     comm = "G28"
     print comm
@@ -52,14 +56,17 @@ def goToInitialPosition():
     s.write("\r")
 
 def startCalibration():
+    print "setOrigin()"
     setOrigin()
-    machineBusy=True
+    pref.machineBusy=True
     lockUntilOk()
 
+    print "goToInitialPosition()"
     goToInitialPosition()
-    machineBusy=True
+    pref.machineBusy=True
     lockUntilOk()
 
+    print "parseCalibrationConfig()"
     parseCalibrationConfig()
 
 def parseCalibrateConfig():
@@ -73,7 +80,7 @@ def parseCalibrateConfig():
         
         sendLineMove(X,Y)
 
-	machineBusy=True
+	pref.machineBusy=True
         lockUntilOk()
 
         Z = detectNumber()
@@ -89,7 +96,10 @@ def parseCalibrateConfig():
 
 def checkMachineState(comm):
      if comm.find('ok') > -1:
-	machineBusy=False
+	print "ACK RECEIVED"
+	pref.machineBusy=False
+     else:
+	print "waiting....."
 
 def sendLineMove(_X,_Y):
     comm = "G1 X"+_X+" Y"+_Y+" F1000"
@@ -99,7 +109,12 @@ def sendLineMove(_X,_Y):
     s.write("\r")
 
 def lockUntilOk():
-    while machineBusy==True:
+    print "pref.machineBusy inside lockUntilOk()"
+    print pref.machineBusy
+    ctr = 0
+    while pref.machineBusy==True:
+	print ctr 
+        ctr = ctr + 1
         time.sleep(1)
 
 def detectNumber():
@@ -130,6 +145,9 @@ t2.start()
 
 print "Press <Enter> to exit."
 print "Wait a moment for initializing......"
+
+pref = Pref()
+
 while(True):
     try:
         key = raw_input()
@@ -142,7 +160,6 @@ while(True):
         key += "\n"
         s.write(key)
     except Exception:
-        #print "\nstop thread2"
 	s.close()
         t2._Thread__stop()
         exit()
