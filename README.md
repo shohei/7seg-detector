@@ -22,3 +22,8 @@ $  fswebcam --no-timestamp --no-banner -r 1280x1024 image.jpg
 $ ./detector.sh
 -100
 ```
+
+# Synopsis
+```
+$ python autocalibrate.py 
+```
