@@ -64,7 +64,7 @@ def parseCalibrateConfig():
 def detectNumber():
     command = "fswebcam --no-timestamp --no-banner -r 1280x1024 image.jpg;\
             python trimmer.py; python binarize.py; \
-            ./ssocr -d -1 bwimage.jpg > z_height.txt"
+            ./ssocr -d -1 bwimage.jpg | cat | perl -ne 'print substr($_,0,length($_)-2);print \".\";print substr($_,-2);' > z_height.txt"
     #command = "python trimmer.py; python binarize.py; \
     #         ./ssocr -d -1 bwimage.jpg > z_height.txt"
     os.system(command)
