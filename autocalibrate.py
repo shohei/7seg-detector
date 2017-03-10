@@ -130,7 +130,7 @@ def checkMachineState(comm):
 	pref.machineBusy=False
 
 def sendLineMove(_X,_Y):
-    comm = "G1 X"+_X+" Y"+_Y+" F1000"
+    comm = "G1 X"+_X+" Y"+_Y+" F2000"
     print comm
     for c in comm:
         s.write(c)
