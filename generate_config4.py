@@ -12,7 +12,7 @@ for theta in angles:
 coordinates = zip(x,y)
 
 unitsA = [-5,-7,-9] 
-unitsC = [-5,-7,-9] 
+unitsC = [5,7,9] 
 rod_offsets = list(itertools.product(unitsA, unitsC)) # Tower A,B,C
 
 fout = open("config.txt",'w')
