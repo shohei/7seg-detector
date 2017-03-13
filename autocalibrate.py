@@ -9,6 +9,19 @@ import commands
 import os
 import traceback
 
+class bcolors:
+    HEADER = '\033[95m'
+    OKBLUE = '\033[94m'
+    OKGREEN = '\033[92m'
+    WARNING = '\033[93m'
+    FAIL = '\033[91m'
+    ENDC = '\033[0m'
+    BOLD = '\033[1m'
+    UNDERLINE = '\033[4m'
+
+def pprint(words):
+    print bcolors.WARNING + words + bcolors.ENDC
+
 
 try:
     status, output = commands.getstatusoutput("ls /dev/ttyACM0")
@@ -27,6 +40,9 @@ fout = open("result.txt",'w')
 rod1 = 0
 rod2 = 0
 rod3 = 0
+radiusA = 0
+radiusB = 0
+radiusC = 0
 X = 0 
 Y = 0
 
@@ -45,6 +61,13 @@ class Pref():
 
 def setRodTrim(a,b,c):
     comm = "M665 A"+a+" B"+b+" C"+c
+    print comm
+    for c in comm:
+        s.write(c)
+    s.write("\r")
+
+def setRadiusTrim(p,q,r):
+    comm = "M665 P"+p+" Q"+q+" R"+r
     print comm
     for c in comm:
         s.write(c)
@@ -89,14 +112,22 @@ def parseCalibrateConfig():
     fin = open("config.txt",'r').readlines()
     lineNumber = 1
     for line in fin:
-        rod1 = line.split(",")[0].rstrip()
-        rod2 = line.split(",")[1].rstrip()
-        rod3 = line.split(",")[2].rstrip()
+        #rod1 = line.split(",")[0].rstrip()
+        #rod2 = line.split(",")[1].rstrip()
+        #rod3 = line.split(",")[2].rstrip()
+        radius1 = line.split(",")[0].rstrip()
+        radius2 = line.split(",")[1].rstrip()
+        radius3 = line.split(",")[2].rstrip()
         X = line.split(",")[3].rstrip()
         Y = line.split(",")[4].rstrip()
 
-        print "setRodTrim()"
-        setRodTrim(rod1,rod2,rod3)
+        #print "setRodTrim()"
+        #setRodTrim(rod1,rod2,rod3)
+        #pref.machineBusy=True
+        #lockUntilOk()
+
+        pprint("setRadiusTrim()")
+        setRadiusTrim(radius1,radius2,radius3)
         pref.machineBusy=True
         lockUntilOk()
 
@@ -108,13 +139,14 @@ def parseCalibrateConfig():
         z_height = detectNumber()
         try:
             z_height = float(z_height)
-            print "{0},{1},{2},{3},{4},{5}\n".format(rod1,rod2,rod3,X,Y,z_height)
+            pprint("{0},{1},{2},{3},{4},{5}\n".format(rod1,rod2,rod3,X,Y,z_height)) 
             fout.write("{0},{1},{2},{3},{4},{5}\n".format(rod1,rod2,rod3,X,Y,z_height))
-            print "processed config line ",lineNumber
+            pprint("processed config line "+str(lineNumber))
             lineNumber += 1
         except:
           continue
 
+    pprint("calibration done.") 
     goToPlaneCenter()
 
 # def parseWaitCommand(comm):
@@ -126,12 +158,12 @@ def parseCalibrateConfig():
 
 def checkMachineState(comm):
      if comm.find('ok') > -1:
-	print "ACK RECEIVED"
+	pprint("ACK RECEIVED")
 	pref.machineBusy=False
 
 def sendLineMove(_X,_Y):
     comm = "G1 X"+_X+" Y"+_Y+" F4000"
-    print comm
+    pprint(comm) 
     for c in comm:
         s.write(c)
     s.write("\r")
@@ -165,8 +197,9 @@ def thread2():
 t2 = threading.Thread(target=thread2)
 t2.start()
 
-print "Press <Enter> to exit."
-print "Wait a moment for initializing......"
+
+pprint("Press <Enter> to exit.") 
+pprint("Wait a moment for initializing......")
 
 pref = Pref()
 
@@ -174,7 +207,7 @@ while(True):
     try:
         key = raw_input()
         if (key=='a'):
-            print "calibration start"
+            print bcolors.WARNING + "calibration start" + bcolors.ENDC
             startCalibration()
         if(key==""):
             t2._Thread__stop()

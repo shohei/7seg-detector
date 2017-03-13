@@ -8,11 +8,14 @@ import cv2
 #y =  256
 #width =  133
 #height =  78
-
-x =  205
-y =  259
-width =  176
-height =  73
+x =  259
+y =  260
+width =  138
+height =  79
+#x =  205
+#y =  259
+#width =  176
+#height =  73
 
 src = cv2.imread('image.jpg', 1)
 dst = src[y:y+height, x:x+width]
