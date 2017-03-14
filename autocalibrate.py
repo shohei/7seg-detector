@@ -22,6 +22,11 @@ class bcolors:
 def pprint(words):
     print bcolors.WARNING + words + bcolors.ENDC
 
+def okprint(words):
+    print bcolors.OKGREEN + words + bcolors.ENDC
+
+def ackprint(words):
+    print bcolors.OKBLUE + words + bcolors.ENDC
 
 try:
     status, output = commands.getstatusoutput("ls /dev/ttyACM0")
@@ -66,8 +71,8 @@ def setRodTrim(a,b,c):
         s.write(c)
     s.write("\r")
 
-def setRadiusTrim(p,q,r):
-    comm = "M665 P"+p+" Q"+q+" R"+r
+def setRadiusTrim(o,p,q):
+    comm = "M665 O"+o+" P"+p+" Q"+q
     print comm
     for c in comm:
         s.write(c)
@@ -88,7 +93,7 @@ def setOrigin():
     s.write("\r")
 
 def goToInitialPosition():
-    comm = "G1 Z300"
+    comm = "G1 Z300 F4000"
     print comm
     for c in comm:
         s.write(c)
@@ -139,8 +144,8 @@ def parseCalibrateConfig():
         z_height = detectNumber()
         try:
             z_height = float(z_height)
-            pprint("{0},{1},{2},{3},{4},{5}\n".format(rod1,rod2,rod3,X,Y,z_height)) 
-            fout.write("{0},{1},{2},{3},{4},{5}\n".format(rod1,rod2,rod3,X,Y,z_height))
+            okprint("{0},{1},{2},{3},{4},{5}".format(rod1,rod2,rod3,X,Y,z_height)) 
+            fout.write("{0},{1},{2},{3},{4},{5}".format(rod1,rod2,rod3,X,Y,z_height))
             pprint("processed config line "+str(lineNumber))
             lineNumber += 1
         except:
@@ -158,7 +163,7 @@ def parseCalibrateConfig():
 
 def checkMachineState(comm):
      if comm.find('ok') > -1:
-	pprint("ACK RECEIVED")
+	ackprint("ACK RECEIVED")
 	pref.machineBusy=False
 
 def sendLineMove(_X,_Y):
