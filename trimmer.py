@@ -8,8 +8,8 @@ import cv2
 #y =  256
 #width =  133
 #height =  78
-x =  259
-y =  245
+x =  250
+y =  260
 width =  138
 height =  79
 #x =  205

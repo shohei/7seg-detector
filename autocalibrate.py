@@ -19,6 +19,9 @@ class bcolors:
     BOLD = '\033[1m'
     UNDERLINE = '\033[4m'
 
+def eprint(words):
+    print bcolors.FAIL + words + bcolors.ENDC
+
 def pprint(words):
     print bcolors.WARNING + words + bcolors.ENDC
 
@@ -55,7 +58,8 @@ Y = 0
 class Pref():
     def __init__(self):
 	self.machineBusy = False
-
+        self.success = 0
+        self.fail = 0
 #class Pref():
 #    def __init__(self):
 #        self.rod1 = 0
@@ -144,15 +148,19 @@ def parseCalibrateConfig():
         z_height = detectNumber()
         try:
             z_height = float(z_height)
-            okprint("{0},{1},{2},{3},{4},{5}".format(rod1,rod2,rod3,X,Y,z_height)) 
-            fout.write("{0},{1},{2},{3},{4},{5}".format(rod1,rod2,rod3,X,Y,z_height))
+            okprint("{0},{1},{2},{3},{4},{5}\n".format(rod1,rod2,rod3,X,Y,z_height)) 
+            fout.write("{0},{1},{2},{3},{4},{5}\n".format(rod1,rod2,rod3,X,Y,z_height))
             pprint("processed config line "+str(lineNumber))
             lineNumber += 1
+            pref.success += 1
         except:
+          pref.fail += 1
           continue
 
     pprint("calibration done.") 
+    eprint("Success rate: "+str(pref.success/((pref.success+pref.fail)*1.0)))
     goToPlaneCenter()
+    os.system("cp -p result.txt result_`date '+%Y%m%d_%H%M%S'`.txt")
 
 # def parseWaitCommand(comm):
 #     if comm.find('WAIT,') > -1:
@@ -214,6 +222,7 @@ while(True):
         if (key=='a'):
             print bcolors.WARNING + "calibration start" + bcolors.ENDC
             startCalibration()
+            continue
         if(key==""):
             t2._Thread__stop()
             exit()
