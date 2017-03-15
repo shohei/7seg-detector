@@ -150,12 +150,13 @@ def parseCalibrateConfig():
             z_height = float(z_height)
             #okprint("{0},{1},{2},{3},{4},{5}\n".format(rod1,rod2,rod3,X,Y,z_height)) 
             #fout.write("{0},{1},{2},{3},{4},{5}\n".format(rod1,rod2,rod3,X,Y,z_height))
-            okprint("{0},{1},{2},{3},{4},{5},{6},{7},{8}\n".format(rad1,rad2,rad3,radius1,radius2,radius3,X,Y,z_height)) 
-            fout.write("{0},{1},{2},{3},{4},{5},{6},{7},{8}\n".format(rad1,rad2,rad3,radius1,radius2,radius3,X,Y,z_height))
+            okprint("{0},{1},{2},{3},{4},{5},{6},{7},{8}\n".format(rod1,rod2,rod3,radius1,radius2,radius3,X,Y,z_height)) 
+            fout.write("{0},{1},{2},{3},{4},{5},{6},{7},{8}\n".format(rod1,rod2,rod3,radius1,radius2,radius3,X,Y,z_height))
             pprint("processed config line "+str(lineNumber))
             lineNumber += 1
             pref.success += 1
         except:
+          eprint(traceback.format_exc())
           pref.fail += 1
           continue
 
