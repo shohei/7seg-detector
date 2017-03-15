@@ -121,19 +121,19 @@ def parseCalibrateConfig():
     fin = open("config.txt",'r').readlines()
     lineNumber = 1
     for line in fin:
-        #rod1 = line.split(",")[0].rstrip()
-        #rod2 = line.split(",")[1].rstrip()
-        #rod3 = line.split(",")[2].rstrip()
-        radius1 = line.split(",")[0].rstrip()
-        radius2 = line.split(",")[1].rstrip()
-        radius3 = line.split(",")[2].rstrip()
-        X = line.split(",")[3].rstrip()
-        Y = line.split(",")[4].rstrip()
+        rod1 = line.split(",")[0].rstrip()
+        rod2 = line.split(",")[1].rstrip()
+        rod3 = line.split(",")[2].rstrip()
+        radius1 = line.split(",")[3].rstrip()
+        radius2 = line.split(",")[4].rstrip()
+        radius3 = line.split(",")[5].rstrip()
+        X = line.split(",")[6].rstrip()
+        Y = line.split(",")[7].rstrip()
 
-        #print "setRodTrim()"
-        #setRodTrim(rod1,rod2,rod3)
-        #pref.machineBusy=True
-        #lockUntilOk()
+        print "setRodTrim()"
+        setRodTrim(rod1,rod2,rod3)
+        pref.machineBusy=True
+        lockUntilOk()
 
         pprint("setRadiusTrim()")
         setRadiusTrim(radius1,radius2,radius3)
@@ -148,8 +148,10 @@ def parseCalibrateConfig():
         z_height = detectNumber()
         try:
             z_height = float(z_height)
-            okprint("{0},{1},{2},{3},{4},{5}\n".format(rod1,rod2,rod3,X,Y,z_height)) 
-            fout.write("{0},{1},{2},{3},{4},{5}\n".format(rod1,rod2,rod3,X,Y,z_height))
+            #okprint("{0},{1},{2},{3},{4},{5}\n".format(rod1,rod2,rod3,X,Y,z_height)) 
+            #fout.write("{0},{1},{2},{3},{4},{5}\n".format(rod1,rod2,rod3,X,Y,z_height))
+            okprint("{0},{1},{2},{3},{4},{5},{6},{7},{8}\n".format(rad1,rad2,rad3,radius1,radius2,radius3,X,Y,z_height)) 
+            fout.write("{0},{1},{2},{3},{4},{5},{6},{7},{8}\n".format(rad1,rad2,rad3,radius1,radius2,radius3,X,Y,z_height))
             pprint("processed config line "+str(lineNumber))
             lineNumber += 1
             pref.success += 1
